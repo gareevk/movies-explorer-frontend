@@ -1,4 +1,34 @@
 .promo {
     background-color: #DDDEE3;
+    height: 560px;
+}
+
+.promo__content {
+    max-width: 1140px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    margin: auto;
+}
+
+.promo__heading {
+    height: 104px;
+    width: 626px;
+    margin-top: 50px;
+    margin-left: 70px;
+    margin-bottom: 102px;
+    line-height: 52px;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 400;
+    font-size: 40px;
+    color: black;
+}
+
+.promo__image {
+    height: 244px;
+    width: 722px;
+    align-self: flex-end;
+    margin-right: 70px;
+    margin-bottom: 60px;
 }
 

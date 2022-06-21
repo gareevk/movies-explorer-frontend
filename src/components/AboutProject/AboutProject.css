@@ -1,0 +1,96 @@
+.about-project {
+    max-width: 1140px;
+    margin: auto;
+    padding-left: 70px;
+}
+
+.about-project__heading {
+    color: black;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 27px;
+    margin-top: 110px;
+    border-bottom: 1px solid;
+    border-color: black;
+    padding-bottom: 23px;
+    margin-bottom: 0;
+}
+
+.about-project__details-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.about-project__subheading {
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 400;
+    line-height: 25px;
+    font-size: 20px;
+    margin-top: 70px;
+    margin-bottom: 0;
+}
+
+.about-project__description {
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 400;
+    line-height: 20px;
+    font-size: 14px;
+    margin-top: 26px;
+    margin-bottom: 110px;
+}
+
+.about-project__graph {
+    display: flex;
+    margin-bottom: 101px;
+}
+
+.about-project__first-week {
+    height: 36px;
+    width: 228px;
+    background-color: #3456F3;
+    color: white;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 400;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+}
+
+.about-project__backend {
+    height: 36px;
+    width: 228px;
+    color: #A0A0A0;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 500;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+}
+
+.about-project__second-stage {
+    width: 912px;
+    height: 36px;
+    background-color: #F2F2F2;
+    color: black;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 400;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+}
+
+.about-project__frontend {
+    height: 36px;
+    width: 912px;
+    color: #A0A0A0;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-weight: 500;
+    line-height: 36px;
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+}

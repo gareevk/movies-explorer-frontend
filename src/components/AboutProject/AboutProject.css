@@ -2,6 +2,7 @@
     max-width: 1140px;
     margin: auto;
     padding-left: 70px;
+    padding-right: 70px;
 }
 
 .about-project__heading {
@@ -14,7 +15,7 @@
     border-bottom: 1px solid;
     border-color: black;
     padding-bottom: 23px;
-    margin-bottom: 0;
+    margin-bottom: 70;
 }
 
 .about-project__details-container {
@@ -27,7 +28,6 @@
     font-weight: 400;
     line-height: 25px;
     font-size: 20px;
-    margin-top: 70px;
     margin-bottom: 0;
 }
 
@@ -41,13 +41,17 @@
 }
 
 .about-project__graph {
-    display: flex;
     margin-bottom: 101px;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 36px 36px;
 }
 
 .about-project__first-week {
     height: 36px;
-    width: 228px;
+    width: 100%;
+    min-width: 100px;
     background-color: #3456F3;
     color: white;
     font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
@@ -60,7 +64,7 @@
 
 .about-project__backend {
     height: 36px;
-    width: 228px;
+    width: 100%;
     color: #A0A0A0;
     font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
     font-weight: 500;
@@ -71,7 +75,7 @@
 }
 
 .about-project__second-stage {
-    width: 912px;
+    max-width: 100%;
     height: 36px;
     background-color: #F2F2F2;
     color: black;
@@ -85,7 +89,7 @@
 
 .about-project__frontend {
     height: 36px;
-    width: 912px;
+    width: 100%;
     color: #A0A0A0;
     font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
     font-weight: 500;
@@ -93,4 +97,94 @@
     font-size: 14px;
     text-align: center;
     margin: 0;
+}
+
+@media screen and (max-width: 1080px) {
+    .about-project {
+        max-width: 708px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .about-project__heading {
+        margin-top: 90px;
+    }
+
+    .about-project__subheading {
+        font-size: 20px;
+        line-height: 24px;
+        width: 319px;
+        height: 48px;
+    }
+
+    .about-project__description {
+        line-height: 18px;
+        font-size: 12px;
+        width: 319px;
+        height: 54px;
+        margin-bottom: 93px;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .about-project__details-container {
+        flex-direction: column;
+    }
+
+    .about-project__heading {
+        font-size: 22px;
+        margin-top: 70px;
+        margin-bottom: 60px;
+    }
+
+    .about-project__subheading {
+        line-height: 22px;
+        font-size: 18px;
+    }
+
+    .about-project__description {
+        line-height: 16px;
+        font-size: 11px;
+        margin-top: 16px;
+        margin-bottom: 60px;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    .about-project {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .about-project__subheading {
+        font-size: 20px;
+        line-height: 24px;
+        max-width: 284px;
+        height: 44px;
+    }
+
+    .about-project__description {
+        width: 284px;
+        height: 48px;
+    }
+
+    .about-project__first-week {
+        font-size: 11px;
+        height: 35px;  
+    }
+
+    .about-project__backend {
+        font-size: 11px;
+        height: 35px;  
+    }
+
+    .about-project__second-stage {
+        font-size: 11px;
+        height: 35px;
+    }
+
+    .about-project__frontend {
+        font-size: 11px;
+        height: 35px;
+    }
 }

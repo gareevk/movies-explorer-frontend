@@ -1,6 +1,37 @@
 .header {
     display: flex;
-    justify-content: space-between;
     flex-direction: row;
-    width: 100%;
+    max-width: 1140px;
+    padding-left: 70px;
+    padding-right: 70px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    margin: auto;
+}
+
+.header__logo {
+    height: 38px;
+    width: 38px;
+    margin-right: 44px;
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    width: 1102px;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.header__menu-item {
+    text-decoration: none;
+    line-height: 38px;
+    margin-right: 16px;
+    color: black;
+}
+
+.header__menu-item_active {
+    font-weight: 500;
 }

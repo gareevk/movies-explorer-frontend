@@ -1,19 +1,20 @@
 import React from 'react';
+import './SavedMovies.css';
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
-import './Movies.css';
 
-function Movies() {
+function SavedMovies() {
     return (
-        <main className='movies'>
+        <main className='saved-movies'>
             <Header />
             <SearchForm />
-            <MoviesCardList />
+            <MoviesCardList 
+                isInSavedMovies='true'/>
             <Footer />
         </main>
     )
 }
 
-export default Movies;
+export default SavedMovies;

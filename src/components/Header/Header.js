@@ -8,8 +8,6 @@ import Hamburger from '../Hamburger/Hamburger';
 function Header() {
     const isLowRes = useMediaPredicate("(max-width: 768px)");
 
-    
-
     return (
         <header className='header'>
             <img className='header__logo' alt='логотип проекта' src={logo}/>
@@ -28,9 +26,7 @@ function Header() {
                         </nav>
                     </div>
                 )
-            }
-            
-            
+            } 
         </header>
     );
 }

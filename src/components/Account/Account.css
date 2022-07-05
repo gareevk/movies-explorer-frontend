@@ -1,0 +1,75 @@
+.account__heading {
+    margin-top: 74px;
+    text-align: center;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 29px;
+}
+
+.account__form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 123px;
+}
+
+.account__form-container {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
+
+.account__form-container_bordered {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #E8E8E8;
+    margin-bottom: 17px;
+}
+
+.account__form-field {
+    width: 141px;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 13px;
+    text-align: left;
+    margin: 0;
+}
+
+.account__input {
+    width: 122px;
+    margin: 0;
+    margin-left: 147px;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 13px;
+    text-align: right;
+    border: none;
+    background-color: inherit;
+}
+
+.account__buttons-block {
+    display: flex;
+    flex-direction: column;
+    width: 410px;
+    margin: auto;
+    margin-top: 220px;
+}
+
+.account__button {
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: center;
+    border: none;
+    background-color: inherit;
+    padding: 0;
+    cursor: pointer;
+}
+
+.account__button_logout {
+    margin-top: 16px;
+    color: #EE3465;
+}

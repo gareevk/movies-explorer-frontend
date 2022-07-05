@@ -99,3 +99,16 @@
     background-color: inherit;
     cursor: pointer;
 }
+
+@media screen and (max-width: 480px) {
+    .hamburger__navigation-list {
+        max-width: 300px;
+        margin-top: 144px;
+    }
+
+    .hamburger__navigation-list-item {
+        margin-bottom: 24px;
+        font-size: 18px;
+        line-height: 22px;
+    }
+}

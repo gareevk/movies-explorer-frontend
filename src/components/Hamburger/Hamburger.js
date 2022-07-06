@@ -28,7 +28,7 @@ function Hamburger() {
                                 <li className='hamburger__navigation-list-item'><NavLink className='hamburger__navigation-item' activeClassName='hamburger__navigation-item_active' to='/saved-movies'>Сохраненные фильмы</NavLink></li>
                             </li>
                             <li className='hamburger__navigation-list-item hamburger__navigation-list-item_bottom'>
-                                <NavLink activeClassName='hamburger__navigation-item_active' className='hamburger__navigation-item' to='/account' >Аккаунт</NavLink>
+                                <NavLink activeClassName='hamburger__navigation-item_active' className='hamburger__navigation-item' to='/profile' >Аккаунт</NavLink>
                                 <div className='hamburger__account-icon'>
                                 </div>
                             </li>

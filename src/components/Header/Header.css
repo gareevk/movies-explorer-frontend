@@ -16,42 +16,6 @@
     margin-right: 44px;
 }
 
-.header__nav-menu {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.header__container {
-    display: flex;
-    justify-content: space-between;
-    width: 1102px;
-    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    text-align: center;
-}
-
-.header__menu-item {
-    text-decoration: none;
-    line-height: 38px;
-    margin-right: 16px;
-    color: black;
-}
-
-.header__menu-item_active {
-    font-weight: 500;
-}
-
-.header__account-icon {
-    height: 30px;
-    width: 26px;
-    background-color: #F4F4F4;
-    background-image: url(../../images/account-icon.svg);
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 @media screen and (max-width: 1160px) {
     .header {
         padding-left: 30px;

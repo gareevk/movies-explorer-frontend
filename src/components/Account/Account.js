@@ -10,7 +10,7 @@ function Account( { name, email }) {
     }
 
     return (
-        <main className='account'>
+        <section className='account'>
             <Header />
             <h2 className='account__heading'>Привет, {name}!</h2>
             <form className='account__form'>
@@ -27,7 +27,7 @@ function Account( { name, email }) {
                     <button className='account__button account__button_logout'>Выйти из аккаунта</button>
                 </div>
             </form>
-        </main>
+        </section>
     )
 }
 

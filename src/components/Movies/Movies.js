@@ -7,12 +7,12 @@ import './Movies.css';
 
 function Movies() {
     return (
-        <main className='movies'>
+        <section className='movies'>
             <Header />
             <SearchForm />
             <MoviesCardList />
             <Footer />
-        </main>
+        </section>
     )
 }
 

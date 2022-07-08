@@ -11,6 +11,7 @@
     height: 74px;
     padding-left: 70px;
     padding-right: 70px;
+    align-items: center;
 }
 
 .nav-tab__logo {

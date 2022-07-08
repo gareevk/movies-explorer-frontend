@@ -7,7 +7,7 @@ function NavTab() {
     return (
         <header className='nav-tab'>
             <div className='nav-tab__container'>
-                <img className='nav-tab__logo' alt='логотип проекта' src={logo}/>
+                <Link to="/"><img className='nav-tab__logo' alt='логотип проекта' src={logo}/></Link>
                 <nav className='nav-tab__buttons-container'>
                     <Link className='nav-tab__signup' exact to="/signup">Регистрация</Link>
                     <Link className='nav-tab__signin' to="/signin">Войти</Link>

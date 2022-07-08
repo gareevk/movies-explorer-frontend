@@ -16,7 +16,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 function App() {
 
   return (
-    <main className="app">
+    <div className="app">
         <Switch>
             <Route exact path="/">
                 <Main />
@@ -49,7 +49,7 @@ function App() {
               <PageNotFound />
             </Route>
         </Switch>
-    </main>
+    </div>
   );
 }
 

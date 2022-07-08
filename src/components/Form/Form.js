@@ -1,6 +1,7 @@
 import React from 'react';
 import './Form.css';
 import logo from '../../images/logo.svg';
+import { Link } from 'react-router-dom';
 
 function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordValue, link, onSubmit} ) {
     const [formValues, setFormValues] = React.useState( {
@@ -23,7 +24,7 @@ function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordV
     return (
         <div>
             <div className='form__logo-container'>
-                <img className='form__logo' alt='логотип проекта' src={logo}/>
+                <Link to='/'><img className='form__logo' alt='логотип проекта' src={logo}/></Link>
             </div>
             <form className='form' name={`${name}-form`} onSubmit={handleSubmit}>
                 <h2 className='form__heading'>{heading}</h2>

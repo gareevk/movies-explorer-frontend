@@ -32,4 +32,5 @@
     background-image: url(../../images/account-icon.svg);
     background-repeat: no-repeat;
     background-position: center;
+    border-radius: 4px;
 }

@@ -3,7 +3,7 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import tempMovie from '../../images/temp-movie.svg';
 import './MoviesCardList.css';
 
-function MoviesCardList({ isInSavedMovies, movies }) {
+function MoviesCardList({ isInSavedMovies, movies, loadMoreClick, moreMoviesToLoad }) {
 
      function convertDuration(movieDuration) {
          const hours = Math.floor( movieDuration / 60);
@@ -29,9 +29,12 @@ function MoviesCardList({ isInSavedMovies, movies }) {
                     })
                 }
             </ul>
-            <div className='movies-card-list__more-container'>
-                <button className='movies-card-list__more'>Ещё</button>
+            { moreMoviesToLoad ? (
+                <div className='movies-card-list__more-container'>
+                <button className='movies-card-list__more' type='button' onClick={loadMoreClick}>Ещё</button>
             </div>
+            ) : (<></>)}
+            
         </section>
     );
 }

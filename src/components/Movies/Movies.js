@@ -6,53 +6,76 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 import './Movies.css';
 import moviesApi from '../../utils/MoviesApi';
+import Preloader from '../Preloader/Preloader';
 
-function Movies() {
+function Movies({ handleLikeCard }) {
     const [moviesList, setMoviesList] = React.useState([]);
-    const [isShortFilm, setIsShortFilm] = React.useState(false);
     const [searchMovieResult, setSearchMovieResult] = React.useState([]);
     const [moviesToRender, setMoviesToRender] = React.useState([]);
     const [cardsAmountToRender, setCardsAmountToRender] = React.useState(0);
-    const [isMore, setIsMore] = React.useState(true)
+    const [isMore, setIsMore] = React.useState(false);
+    const [isShortFilm, setIsShortFilm] = React.useState(JSON.parse(localStorage.getItem('isShortFilm')) || false);
+    const [searchRequest, setSearchRequest] = React.useState('');
+    const [initialSearchResults, setInitialSearchResults] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [searchResultIsEmpty, setSearchResultIsEmpty] = React.useState(false);
+    //const [isChecked, setIsChecked] = React.useState(false);
 
     const desktopView = useMediaPredicate("(min-width: 768px)");
     const tabletView = useMediaPredicate("(min-width: 480px)");
     const mobileView = useMediaPredicate("(max-width: 479px)");
 
     React.useEffect( () => {
-        initialStates();
-        console.log('drop');
-    }, [])
+        console.log(moviesToRender);
+        console.log(JSON.parse(localStorage.getItem('moviesSearch')));
+        setTimeout(() => {
+            initialStates();
+            if (moviesList.length === 0) {
+                getMoviesList();
+                console.log('movies list: ' + moviesList);
+                console.log(searchResultIsEmpty);
+            }
+        }, 100);
+    }, []);
 
-    function initialStates() {
-        setMoviesList([]);
-        setIsShortFilm(false);
-        setSearchMovieResult([]);
-        setMoviesToRender([]);
-        setCardsAmountToRender(0);
-        setIsMore(true);
+    React.useEffect( () => {
+        setTimeout ( () => {
+            const movies = localStorage.getItem('moviesSearch');
+            if (movies.length > 0) {
+                const request = localStorage.getItem('request');
+                updateSearchRequest(request);
+            }
+        }, 100);
+    }, [moviesList]);
+
+    const updateSearchRequest = (request) => {
+        setIsLoading(true);
+        setCardsAmountToRender(calculateCardsAmountToRender());
+        setTimeout( () => {
+            handleMoviesSearch(request);
+        }, 100);
+        localStorage.setItem('request', request);
     }
+
+    React.useEffect( () => {
+        setSearchMovieResult(handleSearchByMovieType());
+        console.log('initital: ' + initialSearchResults);
+    }, [initialSearchResults]);
     
-    function calculateCardsAmountToRender() {
-        if (desktopView) {
-            setCardsAmountToRender(12);
-        } else if (tabletView) {
-            setCardsAmountToRender(8);
-        } else if (mobileView) {
-            setCardsAmountToRender(5);
-        }
-    }
+    React.useEffect( () => {
+        console.log(searchMovieResult);
+        setMoviesToRender(searchMovieResult.slice(0, cardsAmountToRender));
+    }, [searchMovieResult, cardsAmountToRender]);
 
-    function handleShortFilmCheckbox() {
-        if (isShortFilm) {
-            setIsShortFilm(false);
-        } else {
-            setIsShortFilm(true);
-        }
-    }
+    React.useEffect( () => {
+        setIsLoading(false);
+        setIsMore(handleMoreButtonAvailability());
+        console.log(isShortFilm);
+        localStorage.setItem('isShortFilm', JSON.stringify(isShortFilm));
+    }, [moviesToRender]);
 
-    function getMoviesList() {
-        moviesApi.getMovies()
+    const getMoviesList = () => {
+        return moviesApi.getMovies()
         .then( (movies) => {
             setMoviesList(movies);
         })
@@ -62,69 +85,95 @@ function Movies() {
         } );
     }
 
-    function handleMoviesSearch(movie) {
-        initialStates();
-        getMoviesList();
-        calculateCardsAmountToRender();
-        console.log(cardsAmountToRender);
-        console.log(movie);
-        console.log(moviesList);
-        let movies;
-        const searchResult = moviesList.filter( movieListItem => movieListItem.nameRU.toLowerCase().includes(movie.toLowerCase()));
-        //console.log(searchResult);
-        //console.log(isShortFilm);
-        if (isShortFilm) {
-            const shortMovies = searchResult.filter( movieItem => movieItem.duration < 53 );
-            //console.log(shortMovies);
-            setSearchMovieResult(shortMovies);
-            movies = shortMovies.slice(0, cardsAmountToRender);
-            //console.log(movies);
+    const calculateCardsAmountToRender = () => {
+        let counter;
+        if (tabletView) {
+            counter = 8;
+        } else if (mobileView) {
+            counter = 5;
         } else {
-            setSearchMovieResult(searchResult);
-            movies = searchResult.slice(0, cardsAmountToRender);
-            console.log(movies);
+            counter = 12;
         }
-        setMoviesToRender(movies);
-        if (searchMovieResult.length === movies.length) {
-            setIsMore(false);
-        }
-        //console.log(searchMovieResult);
+        console.log(counter);
+        return counter;
     }
 
-    function loadMoreMovies() {
-        calculateCardsAmountToRender();
-        console.log(searchMovieResult);
+    const calculateMoreCardsToRender = () => {
+        let counter;
         if (desktopView) {
-            setCardsAmountToRender( cardsAmountToRender + 3 );
-        } else if (tabletView) {
-            setCardsAmountToRender( cardsAmountToRender + 2 );
-        } else if (mobileView) {
-            setCardsAmountToRender( cardsAmountToRender + 2 );
+            counter = cardsAmountToRender + 3;
+        } else {
+            counter = cardsAmountToRender + 2;
         }
-        let moviesArray = moviesToRender;
-        console.log(cardsAmountToRender);
-        for ( let i = moviesToRender.length + 1; i <= cardsAmountToRender; i++ ) {
-            if ( i <= searchMovieResult.length) {
-                console.log(searchMovieResult[i]);
-            moviesArray.push(searchMovieResult[i]);
-            } else {
-                setIsMore(false);
-            }
+        return counter;
+    } 
+
+    const handleMoviesSearch = (searchRequest) => {
+        console.log(moviesList);
+        setInitialSearchResults(moviesList.filter( movieListItem => movieListItem.nameRU.toLowerCase().includes(searchRequest.toLowerCase())));
+    }
+
+    const initialStates = () => {
+        setIsMore(false);
+        setIsLoading(false);
+        setSearchResultIsEmpty(false);
+    }
+
+    const handleShortFilmCheckbox = () => {
+        //setIsChecked(!isChecked);
+        if (isShortFilm) {
+            setIsShortFilm(false);
+        } else {
+            setIsShortFilm(true);
         }
-        setMoviesToRender(moviesArray);
+        
+    }
+
+    const handleMoreButtonAvailability = () => {
+        if (searchMovieResult.length > moviesToRender.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const handleSearchByMovieType = () => {
+        let movies;
+        if (isShortFilm) {
+            movies = initialSearchResults.filter( movieItem => movieItem.duration < 53 );
+        } else {
+            movies = initialSearchResults;
+        }
+        if (movies.length === 0) {
+            setSearchResultIsEmpty(true);
+        } else {
+            setSearchResultIsEmpty(false);
+        };
+        localStorage.setItem('moviesSearch', JSON.stringify(movies));
+        console.log(JSON.parse(localStorage.getItem('moviesSearch')));
+        return movies;
+    }
+
+    const loadMoreMovies = () => {
+        setCardsAmountToRender(calculateMoreCardsToRender());
     }
 
     return (
         <div className='movies'>
             <Header />
             <SearchForm 
-                onSubmit={handleMoviesSearch}
+                onSubmit={updateSearchRequest}
                 onShortFilmCheckbox={handleShortFilmCheckbox}
+                searchValue={searchRequest}
+                isChecked={isShortFilm}
             />
+            { searchResultIsEmpty ? <p className='movies__movie-not-found'>Ничего не найдено</p> : <></> }
+            { isLoading ? <Preloader /> : <></> }
             <MoviesCardList 
                 movies={moviesToRender}
                 loadMoreClick={loadMoreMovies}
                 moreMoviesToLoad={isMore}
+                onCardLike={handleLikeCard}
             />
             <Footer />
         </div>

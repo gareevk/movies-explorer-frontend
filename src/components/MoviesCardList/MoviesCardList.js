@@ -1,15 +1,16 @@
 import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import tempMovie from '../../images/temp-movie.svg';
 import './MoviesCardList.css';
 
-function MoviesCardList({ isInSavedMovies, movies, loadMoreClick, moreMoviesToLoad }) {
+function MoviesCardList({ isInSavedMovies, movies, loadMoreClick, moreMoviesToLoad, onCardLike }) {
 
-     function convertDuration(movieDuration) {
+    function convertDuration(movieDuration) {
          const hours = Math.floor( movieDuration / 60);
          const minutes = movieDuration % 60;
          return (`${hours}ч ${minutes}м`);
-     }
+    }
+
+    
 
     return (
         <section className='movies-card-list'>
@@ -24,6 +25,8 @@ function MoviesCardList({ isInSavedMovies, movies, loadMoreClick, moreMoviesToLo
                                 isSaved={false}
                                 isInSavedMovies={isInSavedMovies}
                                 key={movie.id}
+                                card={movie}
+                                onCardLike={onCardLike}
                             />
                         )
                     })

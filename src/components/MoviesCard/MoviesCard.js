@@ -7,7 +7,13 @@ function MoviesCard( {
     movieDuration,
     isSaved,
     isInSavedMovies,
+    card,
+    onCardLike
 } ) {
+    function handleLikeClick() {
+        onCardLike(card);
+    }
+
     return (
         <li className='movies-card'>
             <img className='movies-card__image' alt='обложка фильма' src={movieImageLink}/>
@@ -22,7 +28,7 @@ function MoviesCard( {
                     : <button 
                     type="button" className={`${isSaved
                         ? 'movies-card__like-button movies-card__like-button_active'
-                        : 'movies-card__like-button'}`}>
+                        : 'movies-card__like-button'}`} onClick={handleLikeClick}>
                     </button>
                 }
                 

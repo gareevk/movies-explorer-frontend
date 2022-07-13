@@ -2,4 +2,8 @@ const moviesApiConfig = {
     baseUrl: "https://api.nomoreparties.co/beatfilm-movies",
 }
 
-export { moviesApiConfig };
+const mainApiConfig = {
+    baseUrl: "moviester.nomoreparties.sbs",
+}
+
+export { moviesApiConfig, mainApiConfig };

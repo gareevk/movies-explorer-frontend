@@ -18,7 +18,7 @@ class MainApi {
     }
 
     getMovies() {
-        return fetch(this._baseUrl + '/movie', {
+        return fetch('http://localhost:3000/movies', {
             method: "GET",
             headers: {
               authorization: this._userToken,
@@ -42,7 +42,20 @@ class MainApi {
         thumbnail,
         movieId,
         ) {
-            return fetch(`${this._baseUrl}/movies`, {
+            console.log({country,
+                director,
+                duration,
+                year,
+                description,
+                image,
+                nameRU,
+                nameEN,
+                trailerLink,
+                thumbnail,
+                movieId,}
+            )
+            this._updateToken();
+            return fetch('http://localhost:3000/movies', {
                 method: 'POST',
                 headers: {
                     authorization: this._userToken,
@@ -66,8 +79,9 @@ class MainApi {
     }
 
     deleteMovie(movieId) {
+        console.log(movieId);
         return fetch(
-            this._baseUrl + `/movies/${movieId}`,
+            `http://localhost:3000/movies/${movieId}`,
             {
                 method:  'DELETE',
                 headers: {
@@ -81,9 +95,8 @@ class MainApi {
     
     getUserInfo() {
         this._updateToken();
-        console.log(`http://localhost:3000/users/me/`);
         return fetch(
-            `http://localhost:3000/users/me/`,
+            'http://localhost:3000/users/me/',
             {
                 headers: {
                     authorization: this._userToken,

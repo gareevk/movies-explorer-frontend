@@ -21,29 +21,21 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState( false );
   const [successSubmitStatus, setSuccessSubmitStatus] = React.useState( false );
   const [tooltipMessage, setTooltipMessage] = React.useState('');
-  const [currentUser, setCurrentUser] = React.useState( {} );
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [savedMovies, setSavedMovies] = React.useState([]);
   const history = useHistory();
 
-  
   React.useEffect(() => {
     getUserInfo();
-    handleTokenCheck();
-    setTimeout( () => {
-      console.log(currentUser);
-    }, 100);
-    
-  }, [loggedIn]);
+  }, []);
   
- React.useEffect( () => {
+  React.useEffect(() => {
     handleTokenCheck();
-   
-   console.log(currentUser);
- }, [loggedIn]);
+  }, [loggedIn]);
 
   function getUserInfo() {
     mainApi.getUserInfo()
     .then( user => {
-        console.log(user);
         setCurrentUser( user.data );
     } )
     .catch( (err) => console.log('Ошибка, загрузка профиля не удалась: '+ err) );
@@ -52,7 +44,6 @@ function App() {
   function handleRegister({ name, email, password }) {
     auth.register(name, email, password)
     .then( (res) => {
-      console.log(res);
       if (res) {
         setSuccessSubmitStatus(true);
         setTooltipMessage('Вы успешно зарегистрировались!');
@@ -75,12 +66,10 @@ function App() {
     console.log(email, password);
     auth.authorize(email, password)
     .then( data => {
-      console.log(data.token);
         localStorage.setItem('jwt', data.token);
         return data;
     })
     .then( res => {
-        console.log(res);
         if (res.token) {
             handleTokenCheck();
             setLoggedIn(true);
@@ -106,10 +95,7 @@ function App() {
         auth.checkToken(jwt)
         .then( data => {
             if (data) {
-                console.log(data);
                 setLoggedIn(true);
-                //setCurrentUser(data);
-                //setEmail(data.data.email);
                 history.push('/movies');
             };
         })
@@ -123,14 +109,11 @@ function App() {
   }
 
   function handleUpdateUser(name, email) {
-    //setSubmitButtonMessage('Сохранение...');
     mainApi.updateUserInfo(name, email)
     .then( (user) => {
         setCurrentUser(user.data);
-        //closeAllPopups();
     })
     .catch( err => console.log('Обновление данных пользователя не удалось: ' + err));
-    //.finally( () => setSubmitButtonMessage('Сохранить'));
   } 
 
   function closeInfoTooltip() {
@@ -138,7 +121,64 @@ function App() {
     setSuccessSubmitStatus(false);
     setTooltipMessage('');
   }
-  console.log(currentUser);
+
+  function handleLikeMovie({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    nameRU,
+    nameEN,
+    trailerLink,
+    thumbnail,
+    movieId,
+  }) {
+    const isSaved = savedMovies.some(i => i.nameRU === nameRU);
+    if (!isSaved) {
+      mainApi.saveMovie(
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        nameRU,
+        nameEN,
+        trailerLink,
+        thumbnail,
+        movieId,
+      )
+      .then( (movie) => {
+        setSavedMovies([movie, ...savedMovies]);
+      })
+      .catch( err => console.log(err));
+    } else {
+      const movieToDelete = savedMovies.find((i) => i.nameRU === nameRU);
+      handleDeleteMovie(movieToDelete._id);
+    }
+  }
+
+  function handleDeleteMovie(movieId) {
+    mainApi.deleteMovie(movieId)
+    .then( () => {
+      setSavedMovies( state => state.filter( movie => movie._id !== movieId));
+    })
+    .catch( err => console.log(err));
+  }
+
+  function getSavedMovies() {
+    return mainApi.getMovies()
+    .then( (movies) => {
+        const userMovies = movies.data.filter( movie => movie.owner === currentUser._id );
+        setSavedMovies(userMovies);
+    })
+    .catch( (err) => {
+        console.log(err);
+        return err;
+    } );
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -154,12 +194,19 @@ function App() {
                 path="/movies" 
                 component={Movies}
                 loggedIn={loggedIn}
+                onLike={handleLikeMovie}
+                savedMovies={savedMovies}
+                getSavedMovies={getSavedMovies}
               />
               
               <ProtectedRoute 
                 path="/saved-movies" 
                 component={SavedMovies}
                 loggedIn={loggedIn}
+                onDelete={handleDeleteMovie}
+                savedMovies={savedMovies}
+                movies={savedMovies}
+                getMovies={getSavedMovies}
               />
 
               <ProtectedRoute 

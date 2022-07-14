@@ -8,7 +8,7 @@ import './Movies.css';
 import moviesApi from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
 
-function Movies({ handleLikeCard }) {
+function Movies({ onLike, savedMovies, getSavedMovies }) {
     const [moviesList, setMoviesList] = React.useState([]);
     const [searchMovieResult, setSearchMovieResult] = React.useState([]);
     const [moviesToRender, setMoviesToRender] = React.useState([]);
@@ -19,21 +19,20 @@ function Movies({ handleLikeCard }) {
     const [initialSearchResults, setInitialSearchResults] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [searchResultIsEmpty, setSearchResultIsEmpty] = React.useState(false);
-    //const [isChecked, setIsChecked] = React.useState(false);
 
     const desktopView = useMediaPredicate("(min-width: 768px)");
     const tabletView = useMediaPredicate("(min-width: 480px)");
     const mobileView = useMediaPredicate("(max-width: 479px)");
 
+    React.useEffect(() => {
+        getSavedMovies();
+    }, []);
+
     React.useEffect( () => {
-        console.log(moviesToRender);
-        console.log(JSON.parse(localStorage.getItem('moviesSearch')));
         setTimeout(() => {
             initialStates();
             if (moviesList.length === 0) {
                 getMoviesList();
-                console.log('movies list: ' + moviesList);
-                console.log(searchResultIsEmpty);
             }
         }, 100);
     }, []);
@@ -59,18 +58,15 @@ function Movies({ handleLikeCard }) {
 
     React.useEffect( () => {
         setSearchMovieResult(handleSearchByMovieType());
-        console.log('initital: ' + initialSearchResults);
     }, [initialSearchResults]);
     
     React.useEffect( () => {
-        console.log(searchMovieResult);
         setMoviesToRender(searchMovieResult.slice(0, cardsAmountToRender));
     }, [searchMovieResult, cardsAmountToRender]);
 
     React.useEffect( () => {
         setIsLoading(false);
         setIsMore(handleMoreButtonAvailability());
-        console.log(isShortFilm);
         localStorage.setItem('isShortFilm', JSON.stringify(isShortFilm));
     }, [moviesToRender]);
 
@@ -87,14 +83,14 @@ function Movies({ handleLikeCard }) {
 
     const calculateCardsAmountToRender = () => {
         let counter;
-        if (tabletView) {
+        console.log(tabletView);
+        if (desktopView) {
+            counter = 12;
+        } else if (tabletView) {
             counter = 8;
         } else if (mobileView) {
             counter = 5;
-        } else {
-            counter = 12;
         }
-        console.log(counter);
         return counter;
     }
 
@@ -109,7 +105,6 @@ function Movies({ handleLikeCard }) {
     } 
 
     const handleMoviesSearch = (searchRequest) => {
-        console.log(moviesList);
         setInitialSearchResults(moviesList.filter( movieListItem => movieListItem.nameRU.toLowerCase().includes(searchRequest.toLowerCase())));
     }
 
@@ -120,7 +115,6 @@ function Movies({ handleLikeCard }) {
     }
 
     const handleShortFilmCheckbox = () => {
-        //setIsChecked(!isChecked);
         if (isShortFilm) {
             setIsShortFilm(false);
         } else {
@@ -150,7 +144,6 @@ function Movies({ handleLikeCard }) {
             setSearchResultIsEmpty(false);
         };
         localStorage.setItem('moviesSearch', JSON.stringify(movies));
-        console.log(JSON.parse(localStorage.getItem('moviesSearch')));
         return movies;
     }
 
@@ -173,7 +166,9 @@ function Movies({ handleLikeCard }) {
                 movies={moviesToRender}
                 loadMoreClick={loadMoreMovies}
                 moreMoviesToLoad={isMore}
-                onCardLike={handleLikeCard}
+                onCardLike={onLike}
+                isInSavedMovies={false}
+                savedMovies={savedMovies}
             />
             <Footer />
         </div>

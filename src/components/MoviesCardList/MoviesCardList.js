@@ -2,31 +2,24 @@ import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
-function MoviesCardList({ isInSavedMovies, movies, loadMoreClick, moreMoviesToLoad, onCardLike }) {
-
-    function convertDuration(movieDuration) {
-         const hours = Math.floor( movieDuration / 60);
-         const minutes = movieDuration % 60;
-         return (`${hours}ч ${minutes}м`);
-    }
-
+function MoviesCardList({ isInSavedMovies, movies, loadMoreClick, moreMoviesToLoad, onCardLike, onDelete, savedMovies }) {
     
-
     return (
         <section className='movies-card-list'>
             <ul className='movies-card-list__list'>
-                {
+                {   
                     movies.map( movie => {
                         return (
                             <MoviesCard 
-                                movieImageLink={'https://api.nomoreparties.co'+movie.image.url}
+                                movieImageLink={isInSavedMovies ? movie.image :'https://api.nomoreparties.co'+movie.image.url}
                                 movieName={movie.nameRU}
-                                movieDuration={convertDuration(movie.duration)}
-                                isSaved={false}
+                                movieDuration={movie.duration}
                                 isInSavedMovies={isInSavedMovies}
-                                key={movie.id}
+                                key={isInSavedMovies ? movie._id : movie.id}
                                 card={movie}
                                 onCardLike={onCardLike}
+                                onDelete={onDelete}
+                                savedMovies={savedMovies}
                             />
                         )
                     })

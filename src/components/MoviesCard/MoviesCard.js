@@ -5,14 +5,58 @@ function MoviesCard( {
     movieImageLink,
     movieName,
     movieDuration,
-    isSaved,
+    savedMovies,
     isInSavedMovies,
     card,
-    onCardLike
+    onCardLike,
+    onDelete
 } ) {
-    function handleLikeClick() {
-        onCardLike(card);
+    const [isLiked, setIsLiked] = React.useState(false);
+
+    function convertDuration(movieDuration) {
+        const hours = Math.floor( movieDuration / 60);
+        const minutes = movieDuration % 60;
+        return (`${hours}ч ${minutes}м`);
     }
+
+    function handleLikeClick() {
+        setIsLiked(!isLiked);
+        console.log(card.id);
+        onCardLike({
+            country: card.country || 'no information',
+            director: card.director || 'no information',
+            duration: movieDuration,
+            year: card.year || 'no information',
+            description: card.description || 'no information',
+            image: movieImageLink,
+            nameRU: movieName,
+            nameEN: card.nameEN || 'no information',
+            trailerLink: card.trailerLink || 'no information',
+            thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
+            movieId: card.id,
+        });
+    }
+
+    function deleteCard() {
+        onDelete(card._id);
+    }
+
+    function renderLikes() {
+        const movies = savedMovies.map(movie => {
+            return movie.movieId;
+        });
+        if (movies.includes(card.id)) {
+            setIsLiked(true);
+        };
+    }
+    
+    React.useEffect(() => {
+        setTimeout(() => {
+            renderLikes();
+        }, 100);
+        
+    }, []);
+    
 
     return (
         <li className='movies-card'>
@@ -20,13 +64,13 @@ function MoviesCard( {
             <div className='movies-card__container'>
                 <div className='movies-card__info'>
                     <h3 className='movies-card__name'>{movieName}</h3>
-                    <p className='movies-card__duration'>{movieDuration}</p>
+                    <p className='movies-card__duration'>{convertDuration(movieDuration)}</p>
                 </div>
                 {
                     isInSavedMovies ?
-                    (<button className='movies-card__remove-button'></button>)
+                    (<button className='movies-card__remove-button' onClick={deleteCard}></button>)
                     : <button 
-                    type="button" className={`${isSaved
+                    type="button" className={`${isLiked
                         ? 'movies-card__like-button movies-card__like-button_active'
                         : 'movies-card__like-button'}`} onClick={handleLikeClick}>
                     </button>

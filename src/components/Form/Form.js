@@ -3,7 +3,7 @@ import './Form.css';
 import logo from '../../images/logo.svg';
 import { Link } from 'react-router-dom';
 
-function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordValue, link, onSubmit} ) {
+function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordValue, link, onRegister, onLogin}  ) {
     const [formValues, setFormValues] = React.useState( {
         name: '',
         email: '',
@@ -16,9 +16,15 @@ function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordV
 
     function handleSubmit(e) { 
         e.preventDefault();
-        const {name, email, password} = e.target;
-        console.log(email.value);
-        onSubmit(email, password);
+        if (name === 'register') {
+            const { name, email, password } = e.target;
+            console.log(name.value, email.value, password.value);
+            onRegister({name: name.value, email: email.value, password: password.value});
+        } else if (name === 'login') {
+            const { email, password } = e.target;
+            console.log(email.value, password.value);
+            onLogin({ email: email.value, password: password.value });
+        }
     }
     
     return (
@@ -39,7 +45,7 @@ function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordV
                     : (<></>)
                 }
                 <span className='form__input-name'>E-mail</span>
-                <input className='form__input' id="email" value={passwordValue} name="password" onChange={handleChange}></input>
+                <input className='form__input' id="email" value={passwordValue} onChange={handleChange}></input>
                 <span className='form__error-message'></span>
                 <span className='form__input-name'>Пароль</span>
                 <input className='form__input' id="password"></input>

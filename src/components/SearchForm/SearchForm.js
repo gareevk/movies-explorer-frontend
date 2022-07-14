@@ -14,6 +14,7 @@ function SearchForm({ onSubmit, onShortFilmCheckbox, searchValue, isChecked }) {
         onSubmit(movie.value);
     }
 
+    
     function handleInputchange(e) {
         const input = e.target;
         setInputValue(input.value);

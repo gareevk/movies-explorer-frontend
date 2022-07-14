@@ -11,7 +11,6 @@ class MainApi {
     }
 
     _checkResponse = (res) => {
-        console.log(res);
         if (res.ok) {
             return res.json();
           }
@@ -19,7 +18,7 @@ class MainApi {
     }
 
     getMovies() {
-        return fetch(this._baseUrl + `/movies`, {
+        return fetch(this._baseUrl + '/movie', {
             method: "GET",
             headers: {
               authorization: this._userToken,
@@ -43,7 +42,7 @@ class MainApi {
         thumbnail,
         movieId,
         ) {
-            return fetch(this._baseUrl + `/movies`, {
+            return fetch(`${this._baseUrl}/movies`, {
                 method: 'POST',
                 headers: {
                     authorization: this._userToken,
@@ -82,12 +81,14 @@ class MainApi {
     
     getUserInfo() {
         this._updateToken();
+        console.log(`http://localhost:3000/users/me/`);
         return fetch(
-            this._baseUrl + '/users/me',
+            `http://localhost:3000/users/me/`,
             {
                 headers: {
                     authorization: this._userToken,
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
             }
         )
@@ -95,7 +96,7 @@ class MainApi {
     }
 
     updateUserInfo(name, email) {
-        return fetch( this._baseUrl + 'users/me/avatar',
+        return fetch('http://localhost:3000/users/me/',
         {
             method: 'PATCH',
             headers: { 

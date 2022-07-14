@@ -3,13 +3,13 @@ import './Register.css';
 import Form from '../Form/Form';
 import { Link } from 'react-router-dom';
 
-function Register( { onSubmit }) {
+function Register( { onRegister }) {
 
     return (
         <div className='register'>
             <Form 
                 name='register'
-                onSubmit={onSubmit}
+                onRegister={onRegister}
                 heading="Добро пожаловать!"
                 buttonMessage="Зарегистрироваться"
                 formMessage="Уже зарегистрированы? "

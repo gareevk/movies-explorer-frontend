@@ -3,7 +3,8 @@ const moviesApiConfig = {
 }
 
 const mainApiConfig = {
-    baseUrl: "moviester.nomoreparties.sbs",
+    //baseUrl: "moviester.nomoreparties.sbs",
+    baseUrl: "http://localhost:3000"
 }
 
 export { moviesApiConfig, mainApiConfig };

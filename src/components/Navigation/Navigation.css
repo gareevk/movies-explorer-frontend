@@ -1,0 +1,36 @@
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    width: 1102px;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.navigation__nav-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.navigation__menu-item {
+    text-decoration: none;
+    line-height: 38px;
+    margin-right: 16px;
+    color: black;
+}
+
+.navigation__menu-item_active {
+    font-weight: 500;
+}
+
+.navigation__account-icon {
+    height: 30px;
+    width: 26px;
+    background-color: #F4F4F4;
+    background-image: url(../../images/account-icon.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 4px;
+}

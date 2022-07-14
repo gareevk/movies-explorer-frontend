@@ -18,7 +18,7 @@ class MainApi {
     }
 
     getMovies() {
-        return fetch('http://localhost:3000/movies', {
+        return fetch('https://moviester.nomoreparties.sbs/movies', {
             method: "GET",
             headers: {
               authorization: this._userToken,
@@ -55,7 +55,7 @@ class MainApi {
                 movieId,}
             )
             this._updateToken();
-            return fetch('http://localhost:3000/movies', {
+            return fetch('https://moviester.nomoreparties.sbs/movies', {
                 method: 'POST',
                 headers: {
                     authorization: this._userToken,
@@ -81,7 +81,7 @@ class MainApi {
     deleteMovie(movieId) {
         console.log(movieId);
         return fetch(
-            `http://localhost:3000/movies/${movieId}`,
+            `https://moviester.nomoreparties.sbs/movies/${movieId}`,
             {
                 method:  'DELETE',
                 headers: {
@@ -96,7 +96,7 @@ class MainApi {
     getUserInfo() {
         this._updateToken();
         return fetch(
-            'http://localhost:3000/users/me/',
+            'https://moviester.nomoreparties.sbs/users/me/',
             {
                 headers: {
                     authorization: this._userToken,
@@ -109,7 +109,7 @@ class MainApi {
     }
 
     updateUserInfo(name, email) {
-        return fetch('http://localhost:3000/users/me/',
+        return fetch('https://moviester.nomoreparties.sbs/users/me/',
         {
             method: 'PATCH',
             headers: { 

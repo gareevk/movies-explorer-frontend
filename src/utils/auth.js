@@ -1,5 +1,5 @@
-const BASE_URL = 'http://localhost:3000';
-//const BASE_URL = 'https://moviester.nomoreparties.sbs';
+//const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'https://moviester.nomoreparties.sbs';
 
 export const register = (name, email, password) => {
     console.log(`${BASE_URL}/signup/`);

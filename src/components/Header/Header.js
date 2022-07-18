@@ -13,8 +13,8 @@ function Header() {
         <header className='header'>
             <Link to="/"><img className='header__logo' alt='логотип проекта' src={logo}/></Link>
             {
-                isLowRes ? 
-                    <Hamburger />
+                isLowRes 
+                ? <Hamburger />
                 : <Navigation />
             } 
         </header>

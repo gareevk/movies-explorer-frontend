@@ -23,15 +23,21 @@ function App() {
   const [tooltipMessage, setTooltipMessage] = React.useState('');
   const [currentUser, setCurrentUser] = React.useState({});
   const [savedMovies, setSavedMovies] = React.useState([]);
+  const [filteredMovies, setFilteredMovies] = React.useState([]);
+  const [isChecked, setIsChecked] = React.useState(localStorage.getItem('isShortFilm') || false);
   const history = useHistory();
 
   React.useEffect(() => {
+    handleTokenCheck();
     getUserInfo();
+    handleShortFilmCheckbox();
   }, []);
+  
   
   React.useEffect(() => {
     handleTokenCheck();
   }, [loggedIn]);
+  
 
   function getUserInfo() {
     mainApi.getUserInfo()
@@ -63,7 +69,6 @@ function App() {
   }
 
   function handleLogin({ email, password }) {
-    console.log(email, password);
     auth.authorize(email, password)
     .then( data => {
         localStorage.setItem('jwt', data.token);
@@ -96,7 +101,6 @@ function App() {
         .then( data => {
             if (data) {
                 setLoggedIn(true);
-                history.push('/movies');
             };
         })
         .catch( err => console.log(err));
@@ -106,6 +110,10 @@ function App() {
   function handleSignOut() {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
+    setCurrentUser({});
+    localStorage.removeItem('searchRequest');
+    localStorage.removeItem('isShortFilm');
+    localStorage.removeItem('movies');
   }
 
   function handleUpdateUser(name, email) {
@@ -160,7 +168,7 @@ function App() {
     }
   }
 
-  function handleDeleteMovie(movieId) {
+  async function handleDeleteMovie(movieId) {
     mainApi.deleteMovie(movieId)
     .then( () => {
       setSavedMovies( state => state.filter( movie => movie._id !== movieId));
@@ -168,7 +176,7 @@ function App() {
     .catch( err => console.log(err));
   }
 
-  function getSavedMovies() {
+  async function getSavedMovies() {
     return mainApi.getMovies()
     .then( (movies) => {
         const userMovies = movies.data.filter( movie => movie.owner === currentUser._id );
@@ -180,6 +188,23 @@ function App() {
     } );
   }
 
+  function handleFilterMovies(filterRequest) {
+    if (filterRequest) {
+      console.log(savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) ));
+      setFilteredMovies(savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) ));
+    } else {
+      setFilteredMovies(savedMovies);
+    }
+  }
+
+  const handleShortFilmCheckbox = () => {
+    if (isChecked) {
+        setIsChecked(false);
+    } else {
+        setIsChecked(true);
+    }
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
     
@@ -187,7 +212,9 @@ function App() {
         
           <Switch>
               <Route exact path="/">
-                  <Main />
+                  <Main 
+                    loggedIn={loggedIn}
+                  />
               </Route>
 
               <ProtectedRoute 
@@ -197,6 +224,9 @@ function App() {
                 onLike={handleLikeMovie}
                 savedMovies={savedMovies}
                 getSavedMovies={getSavedMovies}
+                tokenCheck={handleTokenCheck}
+                isShortFilm={isChecked}
+                onCheckbox={handleShortFilmCheckbox}
               />
               
               <ProtectedRoute 
@@ -205,8 +235,9 @@ function App() {
                 loggedIn={loggedIn}
                 onDelete={handleDeleteMovie}
                 savedMovies={savedMovies}
-                movies={savedMovies}
+                movies={filteredMovies}
                 getMovies={getSavedMovies}
+                onFilter={handleFilterMovies}
               />
 
               <ProtectedRoute 

@@ -21,7 +21,6 @@ function MoviesCard( {
 
     function handleLikeClick() {
         setIsLiked(!isLiked);
-        console.log(card.id);
         onCardLike({
             country: card.country || 'no information',
             director: card.director || 'no information',
@@ -31,7 +30,7 @@ function MoviesCard( {
             image: movieImageLink,
             nameRU: movieName,
             nameEN: card.nameEN || 'no information',
-            trailerLink: card.trailerLink || 'no information',
+            trailerLink: card.trailerLink || 'https://yandex.ru/',
             thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
             movieId: card.id,
         });
@@ -42,12 +41,14 @@ function MoviesCard( {
     }
 
     function renderLikes() {
-        const movies = savedMovies.map(movie => {
-            return movie.movieId;
-        });
-        if (movies.includes(card.id)) {
-            setIsLiked(true);
-        };
+        if (savedMovies) {
+            const movies = savedMovies.map(movie => {
+                return movie.movieId;
+            });
+            if (movies.includes(card.id)) {
+                setIsLiked(true);
+            };
+        }
     }
     
     React.useEffect(() => {
@@ -55,7 +56,7 @@ function MoviesCard( {
             renderLikes();
         }, 100);
         
-    }, []);
+    }, [savedMovies]);
     
 
     return (

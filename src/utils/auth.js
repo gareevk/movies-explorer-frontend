@@ -1,8 +1,9 @@
 const BASE_URL = 'http://localhost:3000';
-//const BASE_URL = 'https://api.avocado.nomoreparties.sbs';
+//const BASE_URL = 'https://moviester.nomoreparties.sbs';
 
 export const register = (name, email, password) => {
-    return fetch(`${BASE_URL}/signup`,
+    console.log(`${BASE_URL}/signup/`);
+    return fetch(`${BASE_URL}/signup/`,
         {
             method: 'POST',
             headers: {
@@ -23,6 +24,7 @@ export const register = (name, email, password) => {
 }
 
 export const authorize = (email, password) => {
+    console.log(`${BASE_URL}/signin`);
     return fetch(`${BASE_URL}/signin`, 
     {
         method: 'POST',

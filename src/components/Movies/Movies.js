@@ -8,14 +8,12 @@ import './Movies.css';
 import moviesApi from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
 
-function Movies({ onLike, savedMovies, getSavedMovies }) {
+function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox }) {
     const [moviesList, setMoviesList] = React.useState([]);
     const [searchMovieResult, setSearchMovieResult] = React.useState([]);
     const [moviesToRender, setMoviesToRender] = React.useState([]);
     const [cardsAmountToRender, setCardsAmountToRender] = React.useState(0);
     const [isMore, setIsMore] = React.useState(false);
-    const [isShortFilm, setIsShortFilm] = React.useState(JSON.parse(localStorage.getItem('isShortFilm')) || false);
-    const [searchRequest, setSearchRequest] = React.useState('');
     const [initialSearchResults, setInitialSearchResults] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [searchResultIsEmpty, setSearchResultIsEmpty] = React.useState(false);
@@ -25,14 +23,16 @@ function Movies({ onLike, savedMovies, getSavedMovies }) {
     const mobileView = useMediaPredicate("(max-width: 479px)");
 
     React.useEffect(() => {
+        console.log(localStorage.getItem('isShortFilm'));
         getSavedMovies();
-    }, []);
-
-    React.useEffect( () => {
         setTimeout(() => {
             initialStates();
             if (moviesList.length === 0) {
-                getMoviesList();
+                if (JSON.parse(localStorage.getItem('movies'))) {
+                    setMoviesList(JSON.parse(localStorage.getItem('movies')));
+                } else {
+                    getMoviesList();
+                }
             }
         }, 100);
     }, []);
@@ -41,7 +41,7 @@ function Movies({ onLike, savedMovies, getSavedMovies }) {
         setTimeout ( () => {
             const movies = localStorage.getItem('moviesSearch');
             if (movies.length > 0) {
-                const request = localStorage.getItem('request');
+                const request = localStorage.getItem('searchRequest');
                 updateSearchRequest(request);
             }
         }, 100);
@@ -53,37 +53,40 @@ function Movies({ onLike, savedMovies, getSavedMovies }) {
         setTimeout( () => {
             handleMoviesSearch(request);
         }, 100);
-        localStorage.setItem('request', request);
+        localStorage.setItem('searchRequest', request);
     }
 
     React.useEffect( () => {
         setSearchMovieResult(handleSearchByMovieType());
-    }, [initialSearchResults]);
+    }, [initialSearchResults, isShortFilm]);
     
     React.useEffect( () => {
         setMoviesToRender(searchMovieResult.slice(0, cardsAmountToRender));
+        if (searchMovieResult === 0) {
+            setSearchResultIsEmpty(true);
+        } else {
+            setSearchResultIsEmpty(false);
+        };
     }, [searchMovieResult, cardsAmountToRender]);
 
     React.useEffect( () => {
         setIsLoading(false);
         setIsMore(handleMoreButtonAvailability());
-        localStorage.setItem('isShortFilm', JSON.stringify(isShortFilm));
     }, [moviesToRender]);
 
     const getMoviesList = () => {
         return moviesApi.getMovies()
         .then( (movies) => {
             setMoviesList(movies);
+            localStorage.setItem('movies', JSON.stringify(movies));
         })
         .catch( (err) => {
-            console.log(err);
             return err;
         } );
     }
 
     const calculateCardsAmountToRender = () => {
         let counter;
-        console.log(tabletView);
         if (desktopView) {
             counter = 12;
         } else if (tabletView) {
@@ -114,15 +117,6 @@ function Movies({ onLike, savedMovies, getSavedMovies }) {
         setSearchResultIsEmpty(false);
     }
 
-    const handleShortFilmCheckbox = () => {
-        if (isShortFilm) {
-            setIsShortFilm(false);
-        } else {
-            setIsShortFilm(true);
-        }
-        
-    }
-
     const handleMoreButtonAvailability = () => {
         if (searchMovieResult.length > moviesToRender.length) {
             return true;
@@ -133,16 +127,12 @@ function Movies({ onLike, savedMovies, getSavedMovies }) {
 
     const handleSearchByMovieType = () => {
         let movies;
+        console.log(isShortFilm);
         if (isShortFilm) {
             movies = initialSearchResults.filter( movieItem => movieItem.duration < 53 );
         } else {
             movies = initialSearchResults;
         }
-        if (movies.length === 0) {
-            setSearchResultIsEmpty(true);
-        } else {
-            setSearchResultIsEmpty(false);
-        };
         localStorage.setItem('moviesSearch', JSON.stringify(movies));
         return movies;
     }
@@ -156,8 +146,7 @@ function Movies({ onLike, savedMovies, getSavedMovies }) {
             <Header />
             <SearchForm 
                 onSubmit={updateSearchRequest}
-                onShortFilmCheckbox={handleShortFilmCheckbox}
-                searchValue={searchRequest}
+                onShortFilmCheckbox={onCheckbox}
                 isChecked={isShortFilm}
             />
             { searchResultIsEmpty ? <p className='movies__movie-not-found'>Ничего не найдено</p> : <></> }

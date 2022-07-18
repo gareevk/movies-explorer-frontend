@@ -1,5 +1,7 @@
 import { mainApiConfig } from "./constants";
 
+
+
 class MainApi {
     constructor() {
         this._url = mainApiConfig.baseUrl;
@@ -18,7 +20,9 @@ class MainApi {
     }
 
     getMovies() {
-        return fetch('https://moviester.nomoreparties.sbs/movies', {
+        //return fetch('http://localhost:3000/movies',
+        return fetch('https://moviester.nomoreparties.sbs/movies', 
+        {
             method: "GET",
             headers: {
               authorization: this._userToken,
@@ -55,7 +59,9 @@ class MainApi {
                 movieId,}
             )
             this._updateToken();
-            return fetch('https://moviester.nomoreparties.sbs/movies', {
+            //return fetch('http://localhost:3000/movies',
+            return fetch('https://moviester.nomoreparties.sbs/movies', 
+            {
                 method: 'POST',
                 headers: {
                     authorization: this._userToken,
@@ -80,8 +86,8 @@ class MainApi {
 
     deleteMovie(movieId) {
         console.log(movieId);
-        return fetch(
-            `https://moviester.nomoreparties.sbs/movies/${movieId}`,
+        //return fetch(`http://localhost:3000/movies/${movieId}`,
+        return fetch(`https://moviester.nomoreparties.sbs/movies/${movieId}`,
             {
                 method:  'DELETE',
                 headers: {
@@ -95,8 +101,8 @@ class MainApi {
     
     getUserInfo() {
         this._updateToken();
-        return fetch(
-            'https://moviester.nomoreparties.sbs/users/me/',
+        //return fetch('http://localhost:3000/users/me/',
+        return fetch('https://moviester.nomoreparties.sbs/users/me/',
             {
                 headers: {
                     authorization: this._userToken,
@@ -109,6 +115,7 @@ class MainApi {
     }
 
     updateUserInfo(name, email) {
+        //return fetch('http://localhost:3000/users/me/',
         return fetch('https://moviester.nomoreparties.sbs/users/me/',
         {
             method: 'PATCH',

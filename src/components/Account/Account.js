@@ -8,13 +8,40 @@ function Account( { name, email, onSignOut, onUserUpdate }) {
     const currentUser = React.useContext(CurrentUserContext);
     const [userName, setUserName] = React.useState('');
     const [userEmail, setUserEmail] = React.useState('');
-    console.log(currentUser);
+    const [isValidEmail, setIsValidEmail] = React.useState(false);
+    const [errorMessageEmail, setErrorMessageEmail] = React.useState('');
+    const [isValidName, setIsValidName] = React.useState(false);
+    const [errorMessageName, setErrorMessageName] = React.useState('');
+    //const [isActiveSubmitName, setIsActiveSubmitName] = React.useState(false);
+    //const [isActiveSubmitEmail, setIsActiveSubmitEmail] = React.useState(false)
+    const [isChanged, setIsChanged] = React.useState(false);
+    const [isValid, setIsValid] = React.useState(false);
     
     React.useEffect( () => {
         setUserName(currentUser.name);
         setUserEmail(currentUser.email);
-        console.log(userName, userEmail);
-    }, [currentUser])
+    }, [currentUser]);
+
+    React.useEffect(() => {
+        if (isValidEmail && isValidName) {
+            setIsValid(true);
+        } else {
+            setIsValid(false);
+        }
+
+        if (currentUser.name !== userName) {
+            setIsChanged(true);
+        } else {
+            setIsChanged(false);
+        }
+
+        if (currentUser.email !== userEmail) {
+            setIsChanged(true);
+        } else {
+            setIsChanged(false);
+        }
+
+    }, [isValidEmail, isValidName]);
 
     function allowEdit(e) {
         e.preventDefault();
@@ -29,22 +56,32 @@ function Account( { name, email, onSignOut, onUserUpdate }) {
     function handleSubmit(e) {
         e.preventDefault();
         const { name, email } = e.target;
-        console.log(e.target.name.value);
-        console.log(name.value);
-        console.log(email.value);
         onUserUpdate(name.value, email.value);
-        console.log(isEditable);
         setIsEditable(false);
     }
 
     function handleNameInputChange(e) {
-        const input = e.target.value;
-        setUserName(input);
+        const input = e.target;
+        setUserName(input.value);
+        setIsValidName(input.validity.valid);
+        console.log(input.validity.valid);
+        if (!isValidName) {
+            setErrorMessageName(input.validationMessage);
+        } else {
+            setErrorMessageName('');
+        }
     }
 
     function handleEmailInputChange(e) {
-        const input = e.target.value;
-        setUserEmail(input);
+        const input = e.target;
+        setUserEmail(input.value);
+        setIsValidEmail(input.validity.valid);
+        if (!isValidEmail) {
+            setErrorMessageEmail(input.validationMessage);
+        }
+        else {
+            setErrorMessageEmail('');
+        }
     }
 
     return (
@@ -62,7 +99,7 @@ function Account( { name, email, onSignOut, onUserUpdate }) {
                 </div>
                 <div className='account__buttons-block'>
                     {isEditable ? 
-                    <button className='account__button' type="submit">Сохранить</button>
+                    <button className='account__button' type="submit" disabled={!isChanged && !isValid}>Сохранить</button>
                     : 
                     <button className='account__button' type="button" onClick={allowEdit}>Редактировать</button>
                     }

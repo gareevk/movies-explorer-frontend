@@ -13,7 +13,7 @@ function Login({ onLogin }) {
                 heading="Рады видеть!"
                 buttonMessage="Войти"
                 formMessage="Еще не зарегистрированы? "
-                link={(<Link to="/sign-in" className='form__message form__link-message'>Регистрация</Link>)}
+                link={(<Link to="/signup" className='form__message form__link-message'>Регистрация</Link>)}
             />
         </div>
     );

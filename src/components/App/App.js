@@ -17,7 +17,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(localStorage.getItem('loggedIn') || false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState( false );
   const [successSubmitStatus, setSuccessSubmitStatus] = React.useState( false );
   const [tooltipMessage, setTooltipMessage] = React.useState('');
@@ -67,6 +67,10 @@ function App() {
       return err;
     });
   }
+
+  React.useEffect(() => {
+    localStorage.setItem('loggedIn', loggedIn);
+  }, loggedIn);
 
   function handleLogin({ email, password }) {
     auth.authorize(email, password)

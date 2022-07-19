@@ -65,11 +65,9 @@ function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordV
         e.preventDefault();
         if (name === 'register') {
             const { name, email, password } = e.target;
-            console.log(name.value, email.value, password.value);
             onRegister({name: name.value, email: email.value, password: password.value});
         } else if (name === 'login') {
             const { email, password } = e.target;
-            console.log(email.value, password.value);
             onLogin({ email: email.value, password: password.value });
         }
     }

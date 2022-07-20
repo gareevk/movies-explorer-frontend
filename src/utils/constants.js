@@ -7,4 +7,18 @@ const mainApiConfig = {
     baseUrl: "http://localhost:3000"
 }
 
-export { moviesApiConfig, mainApiConfig };
+const errorMessage = {
+    successRegister: 'Вы успешно зарегистрировались!',
+    wentWrong: 'Что-то пошло не так! Попробуйте ещё раз.',
+    successUserDataChange: 'Данные пользователя успешно изменены!',
+}
+
+const shortMovieDuration = 53;
+
+const cardsToRender = {
+    desktop: 12,
+    tablet: 8,
+    mobile: 5,
+}
+
+export { moviesApiConfig, mainApiConfig, errorMessage, shortMovieDuration, cardsToRender };

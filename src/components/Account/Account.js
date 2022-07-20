@@ -9,9 +9,9 @@ function Account( { onSignOut, onUserUpdate }) {
     const currentUser = React.useContext(CurrentUserContext);
     const [userName, setUserName] = React.useState('');
     const [userEmail, setUserEmail] = React.useState('');
-    const [isValidEmail, setIsValidEmail] = React.useState(false);
+    const [isValidEmail, setIsValidEmail] = React.useState(true);
     const [errorMessageEmail, setErrorMessageEmail] = React.useState('');
-    const [isValidName, setIsValidName] = React.useState(false);
+    const [isValidName, setIsValidName] = React.useState(true);
     const [errorMessageName, setErrorMessageName] = React.useState('');
     const [isChanged, setIsChanged] = React.useState(false);
     const [isValid, setIsValid] = React.useState(false);
@@ -74,16 +74,17 @@ function Account( { onSignOut, onUserUpdate }) {
         }
     }
 
+    function setEmailErrorMessage(message) {
+        setErrorMessageEmail(message);
+    }
+
     function handleEmailInputChange(e) {
         const input = e.target;
         setUserEmail(input.value);
         setIsValidEmail(input.validity.valid);
-        if (!isValidEmail) {
-            setErrorMessageEmail(input.validationMessage);
-        }
-        else {
-            setErrorMessageEmail('');
-        }
+        console.log(input.validationMessage);
+        console.log(!isValidEmail);
+        setEmailErrorMessage(input.validationMessage);
     }
 
     return (

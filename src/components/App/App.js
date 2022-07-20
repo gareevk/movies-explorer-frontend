@@ -15,6 +15,7 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import mainApi from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { errorMessage, shortMovieDuration } from '../../utils/constants';
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(() => {
@@ -70,7 +71,7 @@ function App() {
     .then( (res) => {
       if (res) {
         setSuccessSubmitStatus(true);
-        setTooltipMessage('Вы успешно зарегистрировались!');
+        setTooltipMessage(errorMessage.successRegister);
         setIsInfoTooltipOpen(true);
         auth.authorize(email, password)
           .then( data => {
@@ -83,7 +84,7 @@ function App() {
           })
           .catch( err => console.log(err));        
       } else if (res === undefined) {
-        setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setTooltipMessage(errorMessage.wentWrong);
         setSuccessSubmitStatus(false);
         setIsInfoTooltipOpen(true);
       }
@@ -113,14 +114,14 @@ function App() {
             setLoggedIn(true);
             history.push('/movies');
         } else {
-            setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
+            setTooltipMessage(errorMessage.wentWrong);
             setSuccessSubmitStatus(false);
             setIsInfoTooltipOpen(true);
         }
     })
     .catch(err => {
       console.log(err);
-      setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
+      setTooltipMessage(errorMessage.wentWrong);
       setSuccessSubmitStatus(false);
       setIsInfoTooltipOpen(true);
       return err;
@@ -158,7 +159,7 @@ function App() {
         return user.data;
     })
     .then(() => {
-        setTooltipMessage('Данные пользователя успешно изменены!');
+        setTooltipMessage(errorMessage.successUserDataChange);
         setSuccessSubmitStatus(true);
         setIsInfoTooltipOpen(true);
     })
@@ -240,13 +241,13 @@ function App() {
     if (filterRequest) {
       filterMovies = savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) );
       if (isChecked) {
-        setFilteredMovies(filterMovies.filter( movieItem => movieItem.duration < 53 ));
+        setFilteredMovies(filterMovies.filter( movieItem => movieItem.duration < shortMovieDuration ));
       } else {
         setFilteredMovies(filterMovies);
       }
     } else {
       if (isChecked) {
-        setFilteredMovies(savedMovies.filter( movieItem => movieItem.duration < 53 ));
+        setFilteredMovies(savedMovies.filter( movieItem => movieItem.duration < shortMovieDuration ));
       } else {
         setFilteredMovies(savedMovies);
       }

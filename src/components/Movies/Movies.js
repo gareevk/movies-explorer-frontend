@@ -7,6 +7,7 @@ import Footer from '../Footer/Footer';
 import './Movies.css';
 import moviesApi from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
+import { shortMovieDuration, cardsToRender } from '../../utils/constants';
 
 function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, updateIsChecked }) {
     const [moviesList, setMoviesList] = React.useState([]);
@@ -42,7 +43,6 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
             const movies = localStorage.getItem('moviesSearch');
             if (movies.length > 0) {
                 const request = localStorage.getItem('searchRequest');
-                console.log(request);
                 if (request) {
                     updateSearchRequest(request);
                 }
@@ -92,11 +92,11 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
     const calculateCardsAmountToRender = () => {
         let counter;
         if (desktopView) {
-            counter = 12;
+            counter = cardsToRender.desktop;
         } else if (tabletView) {
-            counter = 8;
+            counter = cardsToRender.tablet;
         } else if (mobileView) {
-            counter = 5;
+            counter = cardsToRender.mobile;
         }
         return counter;
     }
@@ -132,7 +132,7 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
     const handleSearchByMovieType = () => {
         let movies;        
         if (isShortFilm) {
-            movies = initialSearchResults.filter( movieItem => movieItem.duration < 53 );
+            movies = initialSearchResults.filter( movieItem => movieItem.duration < shortMovieDuration );
         } else {
             movies = initialSearchResults;
         }

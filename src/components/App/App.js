@@ -18,7 +18,6 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(() => {
-    console.log(typeof localStorage.getItem('loggedIn'));
     if (localStorage.getItem('loggedIn') === 'true') {
       return true;
     } else {
@@ -73,9 +72,16 @@ function App() {
         setSuccessSubmitStatus(true);
         setTooltipMessage('Вы успешно зарегистрировались!');
         setIsInfoTooltipOpen(true);
-        auth.authorize(email, password);
-        setLoggedIn(true);
-        history.push('/movies');
+        auth.authorize(email, password)
+          .then( data => {
+            localStorage.setItem('jwt', data.token);
+            return data;
+          })
+          .then(() => {
+            setLoggedIn(true);
+            history.push('/movies');
+          })
+          .catch( err => console.log(err));        
       } else if (res === undefined) {
         setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
         setSuccessSubmitStatus(false);
@@ -149,8 +155,19 @@ function App() {
     mainApi.updateUserInfo(name, email)
     .then( (user) => {
         setCurrentUser(user.data);
+        return user.data;
     })
-    .catch( err => console.log('Обновление данных пользователя не удалось: ' + err));
+    .then(() => {
+        setTooltipMessage('Данные пользователя успешно изменены!');
+        setSuccessSubmitStatus(true);
+        setIsInfoTooltipOpen(true);
+    })
+    .catch( err => {
+        console.log('Обновление данных пользователя не удалось: ' + err);
+        setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setSuccessSubmitStatus(false);
+        setIsInfoTooltipOpen(true);
+    });
   } 
 
   const closeInfoTooltip = () => {

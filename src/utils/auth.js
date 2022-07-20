@@ -2,7 +2,6 @@
 const BASE_URL = 'https://moviester.nomoreparties.sbs';
 
 export const register = (name, email, password) => {
-    console.log(`${BASE_URL}/signup/`);
     return fetch(`${BASE_URL}/signup/`,
         {
             method: 'POST',
@@ -24,7 +23,6 @@ export const register = (name, email, password) => {
 }
 
 export const authorize = (email, password) => {
-    console.log(`${BASE_URL}/signin`);
     return fetch(`${BASE_URL}/signin`, 
     {
         method: 'POST',

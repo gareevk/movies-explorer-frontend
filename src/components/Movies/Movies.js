@@ -42,7 +42,10 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
             const movies = localStorage.getItem('moviesSearch');
             if (movies.length > 0) {
                 const request = localStorage.getItem('searchRequest');
-                updateSearchRequest(request);
+                console.log(request);
+                if (request) {
+                    updateSearchRequest(request);
+                }
             }
         }, 100);
     }, [moviesList]);
@@ -58,7 +61,6 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
 
     React.useEffect( () => {
         setSearchMovieResult(handleSearchByMovieType());
-        console.log(isShortFilm);
         localStorage.setItem('isShortFilm', isShortFilm);
     }, [initialSearchResults, isShortFilm]);
     
@@ -141,6 +143,8 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
     const loadMoreMovies = () => {
         setCardsAmountToRender(calculateMoreCardsToRender());
     }
+
+    console.log(searchResultIsEmpty);
 
     return (
         <div className='movies'>

@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../Header/Header';
 import './Account.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
 function Account( { onSignOut, onUserUpdate }) {
     const [ isEditable, setIsEditable ] = React.useState(false);
@@ -39,6 +40,18 @@ function Account( { onSignOut, onUserUpdate }) {
             setIsEditable(false);
         } else {
             setIsEditable(true);
+        }
+    }
+
+    function buttonValidation() {
+        if (isChanged) {
+            if (isValid) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
         }
     }
 
@@ -80,7 +93,7 @@ function Account( { onSignOut, onUserUpdate }) {
             <form className='account__form' onSubmit={handleSubmit}>
                 <div className='account__form-container account__form-container_bordered'>
                     <h4 className='account__form-field'>Имя</h4>
-                    <input className='account__input' type="text" autoComplete="off" placeholder={userName} name='name' disabled={isEditable ? '' : 'disabled'} value={userName} onChange={handleNameInputChange} required></input>
+                    <input className='account__input' type="text" autoComplete="off" placeholder={userName} name='name' disabled={isEditable ? '' : 'disabled'} value={userName} onChange={handleNameInputChange} required pattern="^[a-zA-Zа-яА-ЯЁё -]+$"></input>
                 </div>
                 <span className="account__input-error">{errorMessageName}</span>
                 <div className='account__form-container'>
@@ -90,13 +103,16 @@ function Account( { onSignOut, onUserUpdate }) {
                 <span className="account__input-error">{errorMessageEmail}</span>
                 <div className='account__buttons-block'>
                     {isEditable ? 
-                    <button className='account__button' type="submit" disabled={!isChanged && !isValid}>Сохранить</button>
+                    <button className='account__button' type="submit" disabled={buttonValidation()}>Сохранить</button>
                     : 
                     <button className='account__button' type="button" onClick={allowEdit}>Редактировать</button>
                     }
                     <button className='account__button account__button_logout' onClick={onSignOut}>Выйти из аккаунта</button>
                 </div>
             </form>
+            <InfoTooltip
+
+            />
         </section>
     )
 }

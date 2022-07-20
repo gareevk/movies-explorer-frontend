@@ -5,11 +5,10 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Footer from '../Footer/Footer';
 
-function SavedMovies({ savedMovies, movies, onDelete, getMovies, onFilter }) {
+function SavedMovies({ savedMovies, movies, onDelete, getMovies, onFilter, onCheckbox, isShortFilm }) {
 
     React.useEffect(() => {
         getMovies();
-        
     }, []);
 
     React.useEffect(() => {
@@ -22,6 +21,8 @@ function SavedMovies({ savedMovies, movies, onDelete, getMovies, onFilter }) {
             <SearchForm 
                 isInSavedMovies={true}
                 onFilter={onFilter}
+                onShortFilmCheckbox={onCheckbox}
+                isChecked={isShortFilm}
             />
             <MoviesCardList 
                 isInSavedMovies={true}

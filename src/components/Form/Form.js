@@ -90,7 +90,7 @@ function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordV
                     : (<></>)
                 }
                 <span className='form__input-name'>E-mail</span>
-                <input className='form__input' id="email" value={userEmail} onChange={handleInputEmailChange} type='email' required></input>
+                <input className='form__input' id="email" value={userEmail} onChange={handleInputEmailChange} type='email' required pattern='^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$'></input>
                 <span className='form__error-message'>{errorMessageEmail}</span>
                 <span className='form__input-name'>Пароль</span>
                 <input className='form__input' id="password" onChange={handleInputPasswordChange} type='password' value={userPassword} required></input>

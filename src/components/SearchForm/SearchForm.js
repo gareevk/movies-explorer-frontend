@@ -9,18 +9,20 @@ function SearchForm({ onSubmit, onShortFilmCheckbox, searchValue, isChecked, isI
 
     React.useEffect(() => {
         const storage = localStorage.getItem('searchRequest');
-        if (storage !== 'null') {
-            setInputValue(storage);
-        }        
+        if (!isInSavedMovies) {
+            if (storage !== 'null') {
+                setInputValue(storage);
+            }
+        }
     }, []);
 
-    function handleSearchFormSubmit(e) {
+    const handleSearchFormSubmit = (e) => {
         e.preventDefault();
         const {movie} = e.target;
         onSubmit(movie.value);
     }
 
-    function handleInputchange(e) {
+    const handleInputChange = (e) => {
         const input = e.target;
         setInputValue(input.value);
         setValidity(input.validity.valid);
@@ -35,10 +37,21 @@ function SearchForm({ onSubmit, onShortFilmCheckbox, searchValue, isChecked, isI
         }
     }
 
-    function handleFilter(e) {
+    const handleFilter = (e) => {
         e.preventDefault();
         const {movie} = e.target;
+        localStorage.setItem('filterRequest', movie.value);
         onFilter(movie.value);
+    }
+
+    React.useEffect(() => {
+        if (isInSavedMovies) {
+            onFilter(localStorage.getItem('filterRequest') || '');
+        }
+    }, [isChecked]);
+
+    const handleCheck = () => {
+        onShortFilmCheckbox();
     }
 
     return (
@@ -48,13 +61,13 @@ function SearchForm({ onSubmit, onShortFilmCheckbox, searchValue, isChecked, isI
                     <img className='search-form__loop-icon' src={loopImage} alt='поле поиска'/>
                 </div>
                 <div className='search-form__input-container'>
-                    <input className='search-form__input' id='movie' type='search' placeholder={'Фильм'} value={inputValue} onReset={handleFilter} onChange={handleInputchange}></input>
+                    <input className='search-form__input' id='movie' type='search' placeholder={'Фильм'} value={inputValue} onReset={handleFilter} onChange={handleInputChange}></input>
                     <div className='search-form__button-container'>
                         <button className='search-form__button' type='submit'></button>
                     </div>
                 </div>
                 <div className='search-form__checkbox-container'>
-                    <input className='search-form__radio' type='checkbox' onChange={onShortFilmCheckbox} defaultChecked={isInSavedMovies ? false : isChecked}></input>
+                    <input className='search-form__radio' type='checkbox' onChange={handleCheck} defaultChecked={isChecked}></input>
                     <span className='search-form__radio-text'>Короткометражки</span>
                 </div>
             </form>

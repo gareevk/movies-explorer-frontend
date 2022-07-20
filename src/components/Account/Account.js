@@ -3,7 +3,7 @@ import Header from '../Header/Header';
 import './Account.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
-function Account( { name, email, onSignOut, onUserUpdate }) {
+function Account( { onSignOut, onUserUpdate }) {
     const [ isEditable, setIsEditable ] = React.useState(false);
     const currentUser = React.useContext(CurrentUserContext);
     const [userName, setUserName] = React.useState('');
@@ -12,8 +12,6 @@ function Account( { name, email, onSignOut, onUserUpdate }) {
     const [errorMessageEmail, setErrorMessageEmail] = React.useState('');
     const [isValidName, setIsValidName] = React.useState(false);
     const [errorMessageName, setErrorMessageName] = React.useState('');
-    //const [isActiveSubmitName, setIsActiveSubmitName] = React.useState(false);
-    //const [isActiveSubmitEmail, setIsActiveSubmitEmail] = React.useState(false)
     const [isChanged, setIsChanged] = React.useState(false);
     const [isValid, setIsValid] = React.useState(false);
     
@@ -23,25 +21,16 @@ function Account( { name, email, onSignOut, onUserUpdate }) {
     }, [currentUser]);
 
     React.useEffect(() => {
-        if (isValidEmail && isValidName) {
-            setIsValid(true);
-        } else {
-            setIsValid(false);
-        }
-
-        if (currentUser.name !== userName) {
+        if ( userName !== currentUser.name || userEmail !== currentUser.email ) {
             setIsChanged(true);
         } else {
             setIsChanged(false);
-        }
-
-        if (currentUser.email !== userEmail) {
-            setIsChanged(true);
-        } else {
-            setIsChanged(false);
-        }
-
-    }, [isValidEmail, isValidName]);
+        };
+      }, [userName, userEmail]);
+        
+      React.useEffect(() => {
+        setIsValid(isValidEmail && isValidName);
+      }, [isChanged, isValidEmail, isValidName]);
 
     function allowEdit(e) {
         e.preventDefault();
@@ -93,10 +82,12 @@ function Account( { name, email, onSignOut, onUserUpdate }) {
                     <h4 className='account__form-field'>Имя</h4>
                     <input className='account__input' type="text" autoComplete="off" placeholder={userName} name='name' disabled={isEditable ? '' : 'disabled'} value={userName} onChange={handleNameInputChange} required></input>
                 </div>
+                <span className="account__input-error">{errorMessageName}</span>
                 <div className='account__form-container'>
                     <h4 className='account__form-field'>E-mail</h4>
-                    <input className='account__input' type="email" autoComplete="off" placeholder={userEmail} name='email'disabled={isEditable ? '' : 'disabled'} value={userEmail} onChange={handleEmailInputChange}></input>
+                    <input className='account__input' type="email" autoComplete="off" placeholder={userEmail} name='email'disabled={isEditable ? '' : 'disabled'} value={userEmail} onChange={handleEmailInputChange} pattern='^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$'></input>
                 </div>
+                <span className="account__input-error">{errorMessageEmail}</span>
                 <div className='account__buttons-block'>
                     {isEditable ? 
                     <button className='account__button' type="submit" disabled={!isChanged && !isValid}>Сохранить</button>

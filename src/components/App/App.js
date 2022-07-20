@@ -17,37 +17,56 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(localStorage.getItem('loggedIn') || false);
+  const [loggedIn, setLoggedIn] = React.useState(() => {
+    console.log(typeof localStorage.getItem('loggedIn'));
+    if (localStorage.getItem('loggedIn') === 'true') {
+      return true;
+    } else {
+      return false;
+    }
+  });
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState( false );
   const [successSubmitStatus, setSuccessSubmitStatus] = React.useState( false );
   const [tooltipMessage, setTooltipMessage] = React.useState('');
   const [currentUser, setCurrentUser] = React.useState({});
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [filteredMovies, setFilteredMovies] = React.useState([]);
-  const [isChecked, setIsChecked] = React.useState(localStorage.getItem('isShortFilm') || false);
+  const [isChecked, setIsChecked] = React.useState(() => {
+    if (localStorage.getItem('isShortFilm') === 'true') {
+      return true;
+    } else {
+      return false
+    }
+  });
   const history = useHistory();
 
   React.useEffect(() => {
     handleTokenCheck();
     getUserInfo();
-    handleShortFilmCheckbox();
-  }, []);
-  
+  }, []);  
   
   React.useEffect(() => {
     handleTokenCheck();
+    getUserInfo();
   }, [loggedIn]);
-  
 
-  function getUserInfo() {
+  const updateIsChecked = () => {
+    if (localStorage.getItem('isShortFilm')) {
+      setIsChecked(localStorage.getItem('isShortFilm'));
+    } else {
+      setIsChecked(false)
+    }
+  }
+
+  const getUserInfo = () => {
     mainApi.getUserInfo()
     .then( user => {
-        setCurrentUser( user.data );
+      setCurrentUser( user.data );
     } )
     .catch( (err) => console.log('Ошибка, загрузка профиля не удалась: '+ err) );
   }
   
-  function handleRegister({ name, email, password }) {
+  const handleRegister = ({ name, email, password }) => {
     auth.register(name, email, password)
     .then( (res) => {
       if (res) {
@@ -69,10 +88,14 @@ function App() {
   }
 
   React.useEffect(() => {
-    localStorage.setItem('loggedIn', loggedIn);
-  }, loggedIn);
+    if (localStorage.getItem('loggedIn') === null) {
+      localStorage.setItem('loggedIn', false);
+    } else {
+      localStorage.setItem('loggedIn', loggedIn);
+    }
+  }, [loggedIn]);
 
-  function handleLogin({ email, password }) {
+  const handleLogin = ({ email, password }) => {
     auth.authorize(email, password)
     .then( data => {
         localStorage.setItem('jwt', data.token);
@@ -98,7 +121,7 @@ function App() {
     });
   }
 
-  function handleTokenCheck() {
+  const handleTokenCheck = () => {
     if (localStorage.getItem('jwt')) {
         const jwt = localStorage.getItem('jwt');
         auth.checkToken(jwt)
@@ -111,16 +134,18 @@ function App() {
     }
   }
 
-  function handleSignOut() {
+  const handleSignOut = () => {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
     setCurrentUser({});
     localStorage.removeItem('searchRequest');
     localStorage.removeItem('isShortFilm');
     localStorage.removeItem('movies');
+    localStorage.removeItem('filterRequest');
+    localStorage.removeItem('loggedIn')
   }
 
-  function handleUpdateUser(name, email) {
+  const handleUpdateUser = (name, email) => {
     mainApi.updateUserInfo(name, email)
     .then( (user) => {
         setCurrentUser(user.data);
@@ -128,13 +153,13 @@ function App() {
     .catch( err => console.log('Обновление данных пользователя не удалось: ' + err));
   } 
 
-  function closeInfoTooltip() {
+  const closeInfoTooltip = () => {
     setIsInfoTooltipOpen(false);
     setSuccessSubmitStatus(false);
     setTooltipMessage('');
   }
 
-  function handleLikeMovie({
+  const handleLikeMovie = ({
     country,
     director,
     duration,
@@ -146,7 +171,7 @@ function App() {
     trailerLink,
     thumbnail,
     movieId,
-  }) {
+  }) => {
     const isSaved = savedMovies.some(i => i.nameRU === nameRU);
     if (!isSaved) {
       mainApi.saveMovie(
@@ -172,7 +197,7 @@ function App() {
     }
   }
 
-  async function handleDeleteMovie(movieId) {
+  const handleDeleteMovie = (movieId) => {
     mainApi.deleteMovie(movieId)
     .then( () => {
       setSavedMovies( state => state.filter( movie => movie._id !== movieId));
@@ -180,7 +205,7 @@ function App() {
     .catch( err => console.log(err));
   }
 
-  async function getSavedMovies() {
+  const getSavedMovies = () => {
     return mainApi.getMovies()
     .then( (movies) => {
         const userMovies = movies.data.filter( movie => movie.owner === currentUser._id );
@@ -192,12 +217,22 @@ function App() {
     } );
   }
 
-  function handleFilterMovies(filterRequest) {
+  const handleFilterMovies = (filterRequest) => {
+    let filterMovies;
+    console.log(filterRequest);
     if (filterRequest) {
-      console.log(savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) ));
-      setFilteredMovies(savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) ));
+      filterMovies = savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) );
+      if (isChecked) {
+        setFilteredMovies(filterMovies.filter( movieItem => movieItem.duration < 53 ));
+      } else {
+        setFilteredMovies(filterMovies);
+      }
     } else {
-      setFilteredMovies(savedMovies);
+      if (isChecked) {
+        setFilteredMovies(savedMovies.filter( movieItem => movieItem.duration < 53 ));
+      } else {
+        setFilteredMovies(savedMovies);
+      }
     }
   }
 
@@ -231,6 +266,7 @@ function App() {
                 tokenCheck={handleTokenCheck}
                 isShortFilm={isChecked}
                 onCheckbox={handleShortFilmCheckbox}
+                updateIsChecked={updateIsChecked}
               />
               
               <ProtectedRoute 
@@ -242,6 +278,8 @@ function App() {
                 movies={filteredMovies}
                 getMovies={getSavedMovies}
                 onFilter={handleFilterMovies}
+                onCheckbox={handleShortFilmCheckbox}
+                isShortFilm={isChecked}
               />
 
               <ProtectedRoute 

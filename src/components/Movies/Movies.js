@@ -8,7 +8,7 @@ import './Movies.css';
 import moviesApi from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
 
-function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox }) {
+function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, updateIsChecked }) {
     const [moviesList, setMoviesList] = React.useState([]);
     const [searchMovieResult, setSearchMovieResult] = React.useState([]);
     const [moviesToRender, setMoviesToRender] = React.useState([]);
@@ -22,8 +22,8 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox }
     const tabletView = useMediaPredicate("(min-width: 480px)");
     const mobileView = useMediaPredicate("(max-width: 479px)");
 
+
     React.useEffect(() => {
-        console.log(localStorage.getItem('isShortFilm'));
         getSavedMovies();
         setTimeout(() => {
             initialStates();
@@ -58,11 +58,13 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox }
 
     React.useEffect( () => {
         setSearchMovieResult(handleSearchByMovieType());
+        console.log(isShortFilm);
+        localStorage.setItem('isShortFilm', isShortFilm);
     }, [initialSearchResults, isShortFilm]);
     
     React.useEffect( () => {
         setMoviesToRender(searchMovieResult.slice(0, cardsAmountToRender));
-        if (searchMovieResult === 0) {
+        if (searchMovieResult.length === 0) {
             setSearchResultIsEmpty(true);
         } else {
             setSearchResultIsEmpty(false);
@@ -126,8 +128,7 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox }
     }
 
     const handleSearchByMovieType = () => {
-        let movies;
-        console.log(isShortFilm);
+        let movies;        
         if (isShortFilm) {
             movies = initialSearchResults.filter( movieItem => movieItem.duration < 53 );
         } else {
@@ -148,6 +149,7 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox }
                 onSubmit={updateSearchRequest}
                 onShortFilmCheckbox={onCheckbox}
                 isChecked={isShortFilm}
+                isInSavedMovies={false}
             />
             { searchResultIsEmpty ? <p className='movies__movie-not-found'>Ничего не найдено</p> : <></> }
             { isLoading ? <Preloader /> : <></> }

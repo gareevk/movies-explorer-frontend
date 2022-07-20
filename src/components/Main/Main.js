@@ -8,7 +8,6 @@ import NavTab from '../NavTab/NavTab';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
-
 function Main({ loggedIn }) {
 
     return (

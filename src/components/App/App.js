@@ -152,6 +152,7 @@ function App() {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
     setCurrentUser({});
+    setSavedMovies({});
     localStorage.removeItem('searchRequest');
     localStorage.removeItem('isShortFilm');
     localStorage.removeItem('movies');

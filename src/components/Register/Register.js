@@ -2,8 +2,16 @@ import React from 'react';
 import './Register.css';
 import Form from '../Form/Form';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-function Register( { onRegister }) {
+function Register( { onRegister, loggedIn }) {
+    const history = useHistory();
+
+    React.useEffect(() => {
+        if (loggedIn) {
+            history.push('/');
+        }
+    }, [loggedIn]);
 
     return (
         <div className='register'>

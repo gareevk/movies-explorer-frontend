@@ -4,18 +4,6 @@ import logo from '../../images/logo.svg';
 import { Link } from 'react-router-dom';
 
 function Form( {name, heading, buttonMessage, formMessage, emailValue, passwordValue, link, onRegister, onLogin}  ) {
-    /*
-    const [formValues, setFormValues] = React.useState( {
-        name: '',
-        email: '',
-        password: '',
-    });
-
-    function handleChange(e) {
-        setFormValues( { ...formValues, [e.target.name]: e.target.value});
-    }
-    */
-
     const [userName, setUserName] = React.useState('');
     const [userEmail, setUserEmail] = React.useState('');
     const [userPassword, setUserPassword] = React.useState('');

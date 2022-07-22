@@ -7,7 +7,7 @@ import Footer from '../Footer/Footer';
 import './Movies.css';
 import moviesApi from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
-import { shortMovieDuration, cardsToRender } from '../../utils/constants';
+import { shortMovieDuration, cardsToRender, moreCardsToRender } from '../../utils/constants';
 
 function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, updateIsChecked }) {
     const [moviesList, setMoviesList] = React.useState([]);
@@ -104,9 +104,9 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
     const calculateMoreCardsToRender = () => {
         let counter;
         if (desktopView) {
-            counter = cardsAmountToRender + 3;
+            counter = cardsAmountToRender + moreCardsToRender.desktop;
         } else {
-            counter = cardsAmountToRender + 2;
+            counter = cardsAmountToRender + moreCardsToRender.mobile;
         }
         return counter;
     } 
@@ -143,8 +143,6 @@ function Movies({ onLike, savedMovies, getSavedMovies, isShortFilm, onCheckbox, 
     const loadMoreMovies = () => {
         setCardsAmountToRender(calculateMoreCardsToRender());
     }
-
-    console.log(searchResultIsEmpty);
 
     return (
         <div className='movies'>

@@ -46,18 +46,6 @@ class MainApi {
         thumbnail,
         movieId,
         ) {
-            console.log({country,
-                director,
-                duration,
-                year,
-                description,
-                image,
-                nameRU,
-                nameEN,
-                trailerLink,
-                thumbnail,
-                movieId,}
-            )
             this._updateToken();
             //return fetch('http://localhost:3000/movies',
             return fetch('https://moviester.nomoreparties.sbs/movies', 
@@ -85,7 +73,6 @@ class MainApi {
     }
 
     deleteMovie(movieId) {
-        console.log(movieId);
         //return fetch(`http://localhost:3000/movies/${movieId}`,
         return fetch(`https://moviester.nomoreparties.sbs/movies/${movieId}`,
             {

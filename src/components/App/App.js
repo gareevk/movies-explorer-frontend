@@ -38,6 +38,13 @@ function App() {
       return false
     }
   });
+  const [isCheckedSavedMovies, setIsCheckedSavedMovies] = React.useState(() => {
+    if (localStorage.getItem('isShortFilmSavedMovie') === 'true') {
+      return true;
+    } else {
+      return false
+    }
+  });
   const history = useHistory();
 
   React.useEffect(() => {
@@ -149,7 +156,10 @@ function App() {
     localStorage.removeItem('isShortFilm');
     localStorage.removeItem('movies');
     localStorage.removeItem('filterRequest');
-    localStorage.removeItem('loggedIn')
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('isShortFilmSavedMovie');
+    localStorage.removeItem('moviesSearch');
+    localStorage.removeItem('request');
   }
 
   const handleUpdateUser = (name, email) => {
@@ -235,18 +245,21 @@ function App() {
     } );
   }
 
+  React.useEffect(() => {
+    getSavedMovies();
+  }, [currentUser]);
+
   const handleFilterMovies = (filterRequest) => {
     let filterMovies;
-    console.log(filterRequest);
     if (filterRequest) {
       filterMovies = savedMovies.filter( movie => movie.nameRU.toLowerCase().includes(filterRequest.toLowerCase()) );
-      if (isChecked) {
+      if (isCheckedSavedMovies) {
         setFilteredMovies(filterMovies.filter( movieItem => movieItem.duration < shortMovieDuration ));
       } else {
         setFilteredMovies(filterMovies);
       }
     } else {
-      if (isChecked) {
+      if (isCheckedSavedMovies) {
         setFilteredMovies(savedMovies.filter( movieItem => movieItem.duration < shortMovieDuration ));
       } else {
         setFilteredMovies(savedMovies);
@@ -259,6 +272,14 @@ function App() {
         setIsChecked(false);
     } else {
         setIsChecked(true);
+    }
+  }
+
+  const handleShortFilmCheckboxSavedMovies = () => {
+    if (isCheckedSavedMovies) {
+        setIsCheckedSavedMovies(false);
+    } else {
+        setIsCheckedSavedMovies(true);
     }
   }
 
@@ -296,8 +317,8 @@ function App() {
                 movies={filteredMovies}
                 getMovies={getSavedMovies}
                 onFilter={handleFilterMovies}
-                onCheckbox={handleShortFilmCheckbox}
-                isShortFilm={isChecked}
+                onCheckbox={handleShortFilmCheckboxSavedMovies}
+                isShortFilm={isCheckedSavedMovies}
               />
 
               <ProtectedRoute 
@@ -311,11 +332,11 @@ function App() {
               />
 
               <Route path="/signup">
-                <Register onRegister={handleRegister}/>
+                <Register onRegister={handleRegister} loggedIn={loggedIn}/>
               </Route>
               
               <Route path="/sign-in">
-                <Login onLogin={handleLogin}/>
+                <Login onLogin={handleLogin} loggedIn={loggedIn}/>
               </Route>
               
               <Route path="*">

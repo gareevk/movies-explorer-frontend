@@ -3,8 +3,8 @@ const moviesApiConfig = {
 }
 
 const mainApiConfig = {
-    //baseUrl: "moviester.nomoreparties.sbs",
-    baseUrl: "http://localhost:3000"
+    baseUrl: "moviester.nomoreparties.sbs",
+    //baseUrl: "http://localhost:3000"
 }
 
 const errorMessage = {
@@ -21,4 +21,9 @@ const cardsToRender = {
     mobile: 5,
 }
 
-export { moviesApiConfig, mainApiConfig, errorMessage, shortMovieDuration, cardsToRender };
+const moreCardsToRender = {
+    desktop: 3,
+    mobile: 2,
+}
+
+export { moviesApiConfig, mainApiConfig, errorMessage, shortMovieDuration, cardsToRender, moreCardsToRender };

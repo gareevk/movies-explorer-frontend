@@ -60,13 +60,13 @@ function Account( { onSignOut, onUserUpdate }) {
         const { name, email } = e.target;
         onUserUpdate(name.value, email.value);
         setIsEditable(false);
+        setIsChanged(false);
     }
 
     function handleNameInputChange(e) {
         const input = e.target;
         setUserName(input.value);
         setIsValidName(input.validity.valid);
-        console.log(input.validity.valid);
         if (!isValidName) {
             setErrorMessageName(input.validationMessage);
         } else {
@@ -82,8 +82,6 @@ function Account( { onSignOut, onUserUpdate }) {
         const input = e.target;
         setUserEmail(input.value);
         setIsValidEmail(input.validity.valid);
-        console.log(input.validationMessage);
-        console.log(!isValidEmail);
         setEmailErrorMessage(input.validationMessage);
     }
 

@@ -70,7 +70,11 @@ function App() {
     .then( user => {
       setCurrentUser( user.data );
     } )
-    .catch( (err) => console.log('Ошибка, загрузка профиля не удалась: '+ err) );
+    .catch( (err) => {
+      console.log('Ошибка, загрузка профиля не удалась: '+ err);
+
+    
+    } );
   }
   
   const handleRegister = ({ name, email, password }) => {
@@ -89,7 +93,9 @@ function App() {
             setLoggedIn(true);
             history.push('/movies');
           })
-          .catch( err => console.log(err));        
+          .catch( err => {
+            console.log(err);
+          });        
       } else if (res === undefined) {
         setTooltipMessage(errorMessage.wentWrong);
         setSuccessSubmitStatus(false);
@@ -97,6 +103,16 @@ function App() {
       }
     })
     .catch( err => {
+      console.log(err === 'Ошибка: 409');
+      if (err === 'Ошибка: 409') {
+        setSuccessSubmitStatus(false);
+        setTooltipMessage(errorMessage.emailExists);
+        setIsInfoTooltipOpen(true);
+      } else if (err === 'Ошибка: 400') {
+        setSuccessSubmitStatus(false);
+        setTooltipMessage(errorMessage.incorrectData);
+        setIsInfoTooltipOpen(true);
+      }
       return err;
     });
   }
@@ -128,9 +144,15 @@ function App() {
     })
     .catch(err => {
       console.log(err);
-      setTooltipMessage(errorMessage.wentWrong);
-      setSuccessSubmitStatus(false);
-      setIsInfoTooltipOpen(true);
+      if (err === 'Ошибка: 401') {
+        setTooltipMessage(errorMessage.wrongEmailOrPassword);
+        setSuccessSubmitStatus(false);
+        setIsInfoTooltipOpen(true);
+      } else {
+        setTooltipMessage(errorMessage.wentWrong);
+        setSuccessSubmitStatus(false);
+        setIsInfoTooltipOpen(true);
+      }      
       return err;
     });
   }
@@ -175,10 +197,17 @@ function App() {
         setIsInfoTooltipOpen(true);
     })
     .catch( err => {
+      if (err === 'Ошибка: 500') {
+        console.log(err);
+        setSuccessSubmitStatus(false);
+        setTooltipMessage(errorMessage.emailExists);
+        setIsInfoTooltipOpen(true);
+      } else {
         console.log('Обновление данных пользователя не удалось: ' + err);
-        setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
+        setTooltipMessage(errorMessage.wentWrong);
         setSuccessSubmitStatus(false);
         setIsInfoTooltipOpen(true);
+      }
     });
   } 
 

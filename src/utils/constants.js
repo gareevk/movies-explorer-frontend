@@ -11,6 +11,9 @@ const errorMessage = {
     successRegister: 'Вы успешно зарегистрировались!',
     wentWrong: 'Что-то пошло не так! Попробуйте ещё раз.',
     successUserDataChange: 'Данные пользователя успешно изменены!',
+    emailExists: 'Пользователь с таким email уже существует',
+    wrongEmailOrPassword: 'Неверный email или пароль',
+    incorrectData: 'Переданы некорректные данные'
 }
 
 const shortMovieDuration = 53;

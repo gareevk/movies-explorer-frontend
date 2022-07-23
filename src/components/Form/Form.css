@@ -81,6 +81,12 @@
 }
 
 .form__error-message {
+    color: #FF3055;
+    font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    text-align: left;
     height: 12px;
 }
 

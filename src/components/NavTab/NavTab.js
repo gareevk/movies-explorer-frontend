@@ -10,7 +10,7 @@ function NavTab() {
                 <Link to="/"><img className='nav-tab__logo' alt='логотип проекта' src={logo}/></Link>
                 <nav className='nav-tab__buttons-container'>
                     <Link className='nav-tab__signup' exact to="/signup">Регистрация</Link>
-                    <Link className='nav-tab__signin' to="/signin">Войти</Link>
+                    <Link className='nav-tab__signin' to="/sign-in">Войти</Link>
                 </nav>
             </div>
         </header>
